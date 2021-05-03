@@ -9,6 +9,9 @@ Domain based GraphQL API
 - lint: check code styleguide
 - lint:format: apply code styleguide rules
 
+## Contributing
+- Please follow http://karma-runner.github.io/5.2/dev/git-commit-msg.html for commit guidelines
+
 ## How to install
 
 Create a .env file following the env example
