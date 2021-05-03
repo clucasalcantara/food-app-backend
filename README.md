@@ -1,4 +1,4 @@
-# Athena
+# Reality Plus - Backend
 
 Domain based GraphQL API
 
