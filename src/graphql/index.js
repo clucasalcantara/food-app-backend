@@ -1,14 +1,7 @@
 // Domains
 import * as common from '../domains/common'
-import * as customers from '../domains/customers'
-import * as employees from '../domains/employees'
-import * as appointments from '../domains/appointments'
+import * as user from '../domains/user'
 // Helpers
 import { generateExecutableSchema } from '../common/helpers/generate-executable-schema'
 
-export const appSchema = generateExecutableSchema([
-  common,
-  customers,
-  employees,
-  appointments,
-])
+export const appSchema = generateExecutableSchema([common, user])

@@ -4,24 +4,18 @@ import { data } from 'rethinkly'
 import { rethinkly } from '../../services'
 
 /**
- * Book an appointment
+ * Insert an user
  * This function is a resolver used by the graphql backend
  * Responsible to input a user based on a GQL payload
  * @param {*} _ GQL Response status and default body
  * @param {Object} configParams
  * @return {Object} response
  */
-export const bookAppointment = async (_, { data: values }) => {
-  logger.info(
-    `Booking an appointment with payload: ${JSON.stringify(values)}...`
-  )
+export const addUser = async (_, { data: values }) => {
+  logger.info(`Inserting user with payload: ${JSON.stringify(values)}...`)
 
   const conn = await rethinkly()
-  const { generated_keys = [] } = await data.insert(
-    conn,
-    'appointments',
-    values
-  )
+  const { generated_keys = [] } = await data.insert(conn, 'users', values)
 
   if (generated_keys.length === 0) {
     logger.error(`Error inserting --data: ${JSON.stringify(values)}`)
@@ -32,26 +26,26 @@ export const bookAppointment = async (_, { data: values }) => {
     }
   }
 
-  logger.info(`Booking created with id ${generated_keys[0]}...`)
+  logger.info(`User inserted with id ${generated_keys[0]}...`)
   return { success: true, generated_id: generated_keys[0] }
 }
 
 /**
- * Delete an appointment
+ * Delete an user
  * This function is a resolver used by the graphql backend
- * Responsible to delete a employee based on a id
+ * Responsible to delete an user based on a id
  * @param {*} _ GQL Response status and default body
  * @param {String} id
  * @return {Object} response
  */
-export const cancelAppointment = async (_, { id }) => {
-  logger.info(`Started appointment ${JSON.stringify(id)} cancelation...`)
+export const deleteUser = async (_, { id }) => {
+  logger.info(`Started user ${JSON.stringify(id)} removal...`)
 
   const conn = await rethinkly()
-  const { errors } = await data.remove(conn, 'appointments', id)
+  const { errors } = await data.remove(conn, 'users', id)
 
   if (errors) {
-    logger.error(`Error deleting appointment with --id: ${id}`)
+    logger.error(`Error deleting users with --id: ${id}`)
 
     return {
       success: false,
@@ -63,26 +57,26 @@ export const cancelAppointment = async (_, { id }) => {
 }
 
 /**
- * Updates an appointment
+ * Updates an user
  * This function is a resolver used by the graphql backend
- * Responsible to update a employee based on a id
+ * Responsible to update an user based on a id
  * @param {*} _ GQL Response status and default body
  * @param {String} id
  * @param {Object} values
  * @return {Object} response
  */
-export const updateAppointment = async (_, { id, data: values }) => {
-  logger.info(`Updating appointment ${JSON.stringify(id)}...`)
+export const updateUser = async (_, { id, data: values }) => {
+  logger.info(`Updating user ${JSON.stringify(id)}...`)
 
   const conn = await rethinkly()
-  const result = await data.get(conn, 'appointments', id)
+  const result = await data.get(conn, 'users', id)
 
   if (result) {
-    const { errors } = await data.update(conn, 'appointments', id, values)
+    const { errors } = await data.update(conn, 'users', id, values)
 
     if (errors) {
       logger.error(
-        `Error updating appointment with --id: ${id} ${JSON.stringify(errors)}`
+        `Error updating user with --id: ${id} ${JSON.stringify(errors)}`
       )
 
       return {
@@ -99,38 +93,38 @@ export const updateAppointment = async (_, { id, data: values }) => {
 }
 
 /**
- * Get all appointments
+ * Get all users
  * This function is a resolver used by the graphql backend
- * Responsible to retrieve all saved trips
+ * Responsible to retrieve all users
  * @param {*} _ GQL Response status and default body
  * @param {Object} configParams
  * @return {Promise} retrieveData response
  */
-export const getAllAppointments = async () => {
-  logger.info('Getting all appointments...')
+export const getAllUsers = async () => {
+  logger.info('Getting all users...')
 
   const conn = await rethinkly()
-  const appointments = await data.get(conn, 'appointments')
+  const users = await data.get(conn, 'users')
 
-  return appointments
+  return users
 }
 
 /**
- * Get an ppointment
+ * Get an user
  * This function is a resolver used by the graphql backend
  * Responsible to retrieve a GQL payload response based on
  * a query by id
  * @param {*} _ GQL Response status and default body
  * @param {Object } configParams
- * @return {Object} employee
+ * @return {Object} Customer
  */
-export const getAppointmentById = async (_, { id }) => {
-  logger.info(`Getting appointment with --id: ${id}`)
+export const getUserById = async (_, { id }) => {
+  logger.info(`Getting user with --id: ${id}`)
 
   const conn = await rethinkly()
-  const result = await data.get(conn, 'appointments', { id })
+  const result = await data.get(conn, 'user', { id })
 
-  logger.info('Here is the appointment:', JSON.stringify(result))
+  logger.info('Here is the user:', JSON.stringify(result))
 
   return result
 }
