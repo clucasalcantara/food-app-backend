@@ -1,8 +1,8 @@
 {
-  "name": "athena",
+  "name": "food-app-backend",
   "private": true,
   "version": "1.0.0",
-  "description": "domain structured graphql api",
+  "description": "domain structured graphql api for the food app",
   "main": "index.js",
   "scripts": {
     "test": "ava",

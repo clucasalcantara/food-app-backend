@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
+
 import { rethinkly } from '../../services'
 
 /**

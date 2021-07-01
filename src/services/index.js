@@ -1,3 +1,5 @@
 import rethinkly from './rethinkly'
+import { ZomatoClient } from './zomato'
+import { GooglePlacesClient } from './google-places'
 
-export { rethinkly }
+export { GooglePlacesClient, rethinkly, ZomatoClient }
