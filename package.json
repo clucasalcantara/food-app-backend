@@ -33,7 +33,8 @@
     "koa-protect": "^1.0.1",
     "koa2-cors": "^2.0.6",
     "nodemon": "^1.19.1",
-    "rethinkly": "^1.4.0"
+    "rethinkly": "^1.4.0",
+    "uuid": "^8.3.2"
   },
   "xo": {
     "extends": [
