@@ -1,40 +1,6 @@
-/* eslint-disable camelcase */
-export const normalizeZomatoResponse = ({
-  id,
-  name,
-  location,
-  cuisines,
-  price_range,
-  currency,
-  average_cost_for_two,
-  highlights,
-  timings,
-  thumb,
-  user_rating,
-  featured_image,
-  phone_numbers,
-  establishment,
-}) => {
-  return {
-    id,
-    name,
-    location,
-    cuisines,
-    price_range,
-    currency,
-    average_cost: average_cost_for_two,
-    highlights,
-    timings,
-    thumb,
-    user_rating: user_rating.aggregate_rating.toString(),
-    featured_image,
-    phone: phone_numbers,
-    category: establishment[0],
-  }
-}
+import { v4 as uuidv4 } from 'uuid'
 
 export const normalizeGooglePlacesResponse = ({
-  id,
   name,
   formatted_address,
   types,
@@ -42,13 +8,13 @@ export const normalizeGooglePlacesResponse = ({
   rating,
 }) => {
   return {
-    id,
+    id: uuidv4(),
     name,
     location: formatted_address,
-    cuisines: types,
-    price_range: price_level,
+    cuisines: types.join(','),
+    price_range: (price_level || '').toString(),
     currency: 'R$',
-    average_cost: price_level,
+    average_cost: (price_level || '').toString(),
     user_rating: rating.toString(),
   }
 }
