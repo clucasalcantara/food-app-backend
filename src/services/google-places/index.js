@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import axios from 'axios'
 import { normalizeGooglePlacesResponse } from '../../helpers'
 
@@ -13,7 +12,8 @@ const client = axios.create({
 export const GooglePlacesClient = {
   getRestaurants: async (location = 'São Paulo') => {
     const {
-      data: { results, next_page_token },
+      // @TODO: Update to get next page data: { results, next_page_token }
+      data: { results },
     } = await client.get('', {
       params: {
         query: `restaurants+in+${location}`,
@@ -21,7 +21,6 @@ export const GooglePlacesClient = {
       },
     })
 
-    console.log({ results, next_page_token })
-    console.log(results.map(result => normalizeGooglePlacesResponse(result)))
+    return results.map(result => normalizeGooglePlacesResponse(result))
   },
 }

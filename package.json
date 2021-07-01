@@ -52,7 +52,8 @@
     ],
     "rules": {
       "prefer-promise-reject-errors": 0,
-      "no-use-extend-native/no-use-extend-native": 0
+      "no-use-extend-native/no-use-extend-native": 0,
+      "camelcase": "off"
     }
   },
   "lint-staged": {
