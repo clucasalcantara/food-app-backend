@@ -1,66 +1,65 @@
 /* eslint-disable camelcase */
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
+import { v4 as uuidv4 } from 'uuid'
 import isAfter from 'date-fns/isAfter'
 // Rethinkly link instance
 import { rethinkly } from '../../services'
-// Zomato Instance
-import { ZomatoClient } from '../../services/zomato'
+// GooglePlaces Instance
 import { GooglePlacesClient } from '../../services/google-places'
-// Helpers
-import { normalizeZomatoResponse } from '../../helpers'
 // Consts
 const cache_expiration = Date.now() + 2592000
 const now = Date.now()
 
-/**
- * Get restaurant types
- * This function is a resolver used by the graphql backend
- * Responsible to retrieve a GQL payload response based on
- * a query by city id
- * @param {*} _ GQL Response status and default body
- * @param {Object } configParams
- * @return {Array} Restaurant categories
- */
-export const getCategoriesByCity = async (_, { city_id }) => {
-  logger.info(`Getting restaurant categories with --city_id: ${city_id}`)
-  const conn = await rethinkly()
-  const dbCategories = await data.get(conn, 'categories')
+// /**
+//  * Get restaurant types
+//  * This function is a resolver used by the graphql backend
+//  * Responsible to retrieve a GQL payload response based on
+//  * a query by city id
+//  * @param {*} _ GQL Response status and default body
+//  * @param {Object } configParams
+//  * @return {Array} Restaurant categories
+//  */
+// export const getCategoriesByCity = async (_, { city_id }) => {
+//   logger.info(`Getting restaurant categories with --city_id: ${city_id}`)
+//   const conn = await rethinkly()
+//   const dbCategories = await data.get(conn, 'categories')
 
-  if (
-    dbCategories.length === 0 ||
-    isAfter(dbCategories[0].cache_expiration, now)
-  ) {
-    logger.info(`Caching restaurant categories for --city_id: ${city_id}`)
-    const apiResults = await ZomatoClient.getCategoriesByCity(city_id)
-    const toInsert = apiResults.map(({ establishment }) => ({
-      ...establishment,
-      city_id,
-      cache_expiration,
-    }))
+//   if (
+//     dbCategories.length === 0 ||
+//     isAfter(dbCategories[0].cache_expiration, now)
+//   ) {
+//     logger.info(`Caching restaurant categories for --city_id: ${city_id}`)
+//     const apiResults = await ZomatoClient.getCategoriesByCity(city_id)
 
-    const failed = []
-    toInsert.map(async record => {
-      try {
-        await data.insert(conn, 'categories', record)
-      } catch (error) {
-        logger.info(`Error inserting category ${record.id}`)
-        failed.concat(record.id)
-      }
-    })
+//     const toInsert = apiResults.map(({ establishment }) => ({
+//       ...establishment,
+//       city_id,
+//       cache_expiration
+//     }))
 
-    logger.info(
-      `Cached ${toInsert.length} restaurant categories for --city_id: ${city_id} with ${failed.length} failures`
-    )
+//     const failed = []
+//     toInsert.map(async record => {
+//       try {
+//         await data.insert(conn, 'categories', record)
+//       } catch (error) {
+//         logger.info(`Error inserting category ${record.id}`)
+//         failed.concat(record.id)
+//       }
+//     })
 
-    return toInsert
-  }
+//     logger.info(
+//       `Cached ${toInsert.length} restaurant categories for --city_id: ${city_id} with ${failed.length} failures`
+//     )
 
-  logger.info(
-    `Returning ${dbCategories.length} cached restaurant categories for --city_id: ${city_id}`
-  )
-  return dbCategories
-}
+//     return toInsert
+//   }
+
+//   logger.info(
+//     `Returning ${dbCategories.length} cached restaurant categories for --city_id: ${city_id}`
+//   )
+//   return dbCategories
+// }
 
 /**
  * Get a restaurant
@@ -76,8 +75,6 @@ export const getById = async (_, { id }) => {
 
   const conn = await rethinkly()
   const result = await data.get(conn, 'restaurants', { id })
-
-  logger.info('Here is the restaurant:', JSON.stringify(result))
 
   return result
 }
@@ -119,75 +116,44 @@ export const getByLocation = async (_, { location }) => {
  * @param {Object} configParams
  * @return {Promise} retrieveData response
  */
-export const getAll = async (_, { city, category, provider = 'zomato' }) => {
+// export const getAll = async (_, { city, category }) => {
+export const getAll = async () => {
   logger.info('Getting all restaurants...')
-  console.log({ provider })
 
   const conn = await rethinkly()
   const dbRestaurants = await data.get(conn, 'restaurants')
   const failed = []
-  let toInsert = []
-
-  await GooglePlacesClient.getRestaurants()
 
   if (
     dbRestaurants.length === 0 ||
-    isAfter(dbRestaurants[0].cache_expiration, now)
+    isAfter(now, dbRestaurants[0].cache_expiration)
   ) {
-    if (provider === 'zomato') {
-      const { results_found } = await ZomatoClient.getRestaurants({
-        city,
-        category,
-      })
+    logger.info('Caching restaurants...')
+    const apiResults = await GooglePlacesClient.getRestaurants()
 
-      const requestsCount = Math.round(results_found / 20)
-      logger.info(
-        `Caching restaurants for --city_id: ${city}, ${results_found} total, ${requestsCount} requests will be made`
-      )
-
-      let start = 0
-      let inserted = 0
-
-      /* eslint-disable no-await-in-loop */
-      for (let i = 0; i <= requestsCount; i++) {
-        const { restaurants } = await ZomatoClient.getRestaurants({
-          city,
-          category,
-          start,
-        })
-
-        toInsert = restaurants.map(({ restaurant }) => ({
-          ...normalizeZomatoResponse(restaurant),
-          city_id: city,
-          cache_expiration: Date.now(),
-        }))
-
-        toInsert.map(async record => {
-          try {
-            await data.insert(conn, 'restaurants', record)
-          } catch (error) {
-            logger.info(`Error inserting restaurant ${record.id}`)
-            failed.concat(record.id)
-          }
-        })
-
-        start += 20
-        inserted += restaurants.length
-
-        logger.info(`API Call number ${i}. to insert size: ${inserted}`)
+    apiResults.map(async establishment => {
+      const record = {
+        ...establishment,
+        cache_expiration,
       }
-    } else {
-      GooglePlacesClient.getRestaurants()
-    }
 
-    /* eslint-enable no-await-in-loop */
+      try {
+        await data.insert(conn, 'restaurants', record)
+      } catch (error) {
+        console.log({ error })
+        logger.info(`Error inserting restaurant ${record.id}`)
+        failed.concat(record.id)
+      }
+    })
 
     logger.info(
-      `Cached ${toInsert.length} restaurants for --city: ${city} with ${failed.length} failures`
+      `Cached ${apiResults.length} restaurants with ${failed.length} failures`
     )
 
-    return toInsert
+    return apiResults
   }
+
+  logger.info('Using cached information...')
 
   return dbRestaurants
 }
@@ -204,9 +170,14 @@ export const insertRestaurant = async (_, { data: values }) => {
   logger.info(`Inserting restaurant ${JSON.stringify(values)}...`)
 
   const conn = await rethinkly()
-  const { generated_keys = [] } = await data.insert(conn, 'restaurants', values)
+  const id = uuidv4()
 
-  if (generated_keys.length === 0) {
+  const { inserted } = await data.insert(conn, 'restaurants', {
+    id,
+    ...values,
+  })
+
+  if (inserted < 1) {
     logger.error(`Error inserting --data: ${JSON.stringify(values)}`)
 
     return {
@@ -215,7 +186,7 @@ export const insertRestaurant = async (_, { data: values }) => {
     }
   }
 
-  return { success: true, generated_id: generated_keys[0] }
+  return { success: true, generated_id: id }
 }
 
 /**

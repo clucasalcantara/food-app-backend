@@ -9,6 +9,6 @@ import {
 } from './actions'
 
 export default {
-  Query: { getById, getByLocation, getCategoriesByCity, getAll },
-  Mutation: { insertRestaurant, deleteRestaurant, updateRestaurant },
+  queries: { getById, getByLocation, getCategoriesByCity, getAll },
+  mutations: { insertRestaurant, deleteRestaurant, updateRestaurant },
 }

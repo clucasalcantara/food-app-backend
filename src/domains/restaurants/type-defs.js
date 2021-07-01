@@ -1,12 +1,10 @@
-import { gql } from 'apollo-server-koa'
-
-export default gql`
+export const types = `
   type Restaurant {
     id: String
     name: String
     location: Location
     cuisines: String
-    price_range: Int
+    price_range: String
     currency: String
     average_cost: Int
     cache_expiration: Int
@@ -51,32 +49,17 @@ export default gql`
     name: String
     city: String
   }
+`
 
-  type insertResponse {
-    generated_id: String
-    success: Boolean
-  }
+export const queries = `
+  getById(id: String): Restaurant
+  getByLocation(location: LocationType): [Restaurant]
+  getCategoriesByCity(city_id: Int): [category]
+  getAll(city: Int, category: Int): [Restaurant]
+`
 
-  type removeResponse {
-    removed_id: String
-    success: Boolean
-  }
-
-  type updateResponse {
-    updated_id: String
-    success: Boolean
-  }
-
-  type Query {
-    getById(id: String): Restaurant
-    getByLocation(location: LocationType): [Restaurant]
-    getCategoriesByCity(city_id: Int): [category]
-    getAll(city: Int, category: Int, provider: String): [Restaurant]
-  }
-
-  type Mutation {
-    insertRestaurant(data: RestaurantInput): insertResponse
-    deleteRestaurant(id: String): removeResponse
-    updateRestaurant(id: String, data: RestaurantInput): updateResponse
-  }
+export const mutations = `
+  insertRestaurant(data: RestaurantInput): insertResponse
+  deleteRestaurant(id: String): removeResponse
+  updateRestaurant(id: String, data: RestaurantInput): updateResponse
 `
