@@ -1,7 +1,6 @@
 import {
   getById,
   getByLocation,
-  getCategoriesByCity,
   getAll,
   insertRestaurant,
   deleteRestaurant,
@@ -9,6 +8,6 @@ import {
 } from './actions'
 
 export default {
-  queries: { getById, getByLocation, getCategoriesByCity, getAll },
+  queries: { getById, getByLocation, getAll },
   mutations: { insertRestaurant, deleteRestaurant, updateRestaurant },
 }

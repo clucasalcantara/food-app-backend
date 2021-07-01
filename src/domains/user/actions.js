@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
 
@@ -129,4 +128,3 @@ export const getUserById = async (_, { id }) => {
 
   return result
 }
-/* eslint-enable camelcase */

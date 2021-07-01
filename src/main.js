@@ -18,5 +18,7 @@ Athena.use(cors())
 Server.applyMiddleware({ app: Athena })
 
 Athena.listen({ port }, () =>
-  logger.info(`🚀 Athena running at http://localhost:${port}${graphqlPath}`)
+  logger.info(
+    `🚀 Food App API running at http://localhost:${port}${graphqlPath}`
+  )
 )
