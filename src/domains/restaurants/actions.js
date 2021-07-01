@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
 import { v4 as uuidv4 } from 'uuid'
@@ -10,56 +9,6 @@ import { GooglePlacesClient } from '../../services/google-places'
 // Consts
 const cache_expiration = Date.now() + 2592000
 const now = Date.now()
-
-// /**
-//  * Get restaurant types
-//  * This function is a resolver used by the graphql backend
-//  * Responsible to retrieve a GQL payload response based on
-//  * a query by city id
-//  * @param {*} _ GQL Response status and default body
-//  * @param {Object } configParams
-//  * @return {Array} Restaurant categories
-//  */
-// export const getCategoriesByCity = async (_, { city_id }) => {
-//   logger.info(`Getting restaurant categories with --city_id: ${city_id}`)
-//   const conn = await rethinkly()
-//   const dbCategories = await data.get(conn, 'categories')
-
-//   if (
-//     dbCategories.length === 0 ||
-//     isAfter(dbCategories[0].cache_expiration, now)
-//   ) {
-//     logger.info(`Caching restaurant categories for --city_id: ${city_id}`)
-//     const apiResults = await ZomatoClient.getCategoriesByCity(city_id)
-
-//     const toInsert = apiResults.map(({ establishment }) => ({
-//       ...establishment,
-//       city_id,
-//       cache_expiration
-//     }))
-
-//     const failed = []
-//     toInsert.map(async record => {
-//       try {
-//         await data.insert(conn, 'categories', record)
-//       } catch (error) {
-//         logger.info(`Error inserting category ${record.id}`)
-//         failed.concat(record.id)
-//       }
-//     })
-
-//     logger.info(
-//       `Cached ${toInsert.length} restaurant categories for --city_id: ${city_id} with ${failed.length} failures`
-//     )
-
-//     return toInsert
-//   }
-
-//   logger.info(
-//     `Returning ${dbCategories.length} cached restaurant categories for --city_id: ${city_id}`
-//   )
-//   return dbCategories
-// }
 
 /**
  * Get a restaurant
@@ -257,4 +206,3 @@ export const updateRestaurant = async (_, { id, data: values }) => {
       : logger.error(`Error updating record with --id: ${id}`)
   }
 }
-/* eslint-enable camelcase */

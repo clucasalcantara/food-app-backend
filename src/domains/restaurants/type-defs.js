@@ -54,7 +54,6 @@ export const types = `
 export const queries = `
   getById(id: String): Restaurant
   getByLocation(location: LocationType): [Restaurant]
-  getCategoriesByCity(city_id: Int): [category]
   getAll(city: Int, category: Int): [Restaurant]
 `
 
