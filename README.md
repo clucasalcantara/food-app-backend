@@ -1,4 +1,4 @@
-# Reality Plus - Backend
+# Food App - Backend
 
 Domain based GraphQL API
 
@@ -10,6 +10,7 @@ Domain based GraphQL API
 - lint:format: apply code styleguide rules
 
 ## Contributing
+
 - Please follow http://karma-runner.github.io/5.2/dev/git-commit-msg.html for commit guidelines
 
 ## How to install
