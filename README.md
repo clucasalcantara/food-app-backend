@@ -1,6 +1,6 @@
 # Food App - Backend
 
-Domain based GraphQL API
+Domain based GraphQL API for the food app
 
 ## Available Scripts
 
