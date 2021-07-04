@@ -29,6 +29,7 @@
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
     "hoopa-logger": "^1.1.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-protect": "^1.0.1",
     "koa2-cors": "^2.0.6",
