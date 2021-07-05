@@ -1,26 +1,43 @@
 import axios from 'axios'
-import { normalizeGooglePlacesResponse } from '../../helpers'
+import logger from 'hoopa-logger'
 
-const GooglePlacesClientConfig = {
-  API_KEY: process.env.GOOGLE_PLACES_API_KEY,
-}
+import { normalizeGooglePlacesResponse } from './helpers'
 
-const client = axios.create({
-  baseURL: 'https://maps.googleapis.com/maps/api/place/textsearch/json',
+const placesClient = axios.create({
+  baseURL: 'https://maps.googleapis.com/maps/api/place'
 })
 
 export const GooglePlacesClient = {
-  getRestaurants: async (location = 'São Paulo') => {
-    const {
-      // @TODO: Update to get next page data: { results, next_page_token }
-      data: { results },
-    } = await client.get('', {
+  getRestaurants: async (cuisine = 'italian', location = 'São Paulo') => {
+    try {
+      const {
+        // @TODO: Update to get next page data: { results, next_page_token }
+        data: { results }
+      } = await placesClient.get('/textsearch/json', {
+        params: {
+          query: `${cuisine}+restaurants+in+${location}`,
+          key: process.env.GOOGLE_PLACES_API_KEY
+        }
+      })
+
+      const data = results.map(result =>
+        normalizeGooglePlacesResponse(result, cuisine)
+      )
+
+      return data
+    } catch (error) {
+      logger.error(error)
+    }
+  },
+  getRestaurantPhoto: async photoreference => {
+    const result = await placesClient.get('/photo', {
       params: {
-        query: `restaurants+in+${location}`,
-        key: GooglePlacesClientConfig.API_KEY,
-      },
+        key: process.env.GOOGLE_PLACES_API_KEY,
+        photoreference,
+        maxwidth: 1024
+      }
     })
 
-    return results.map(result => normalizeGooglePlacesResponse(result))
-  },
+    return result
+  }
 }
