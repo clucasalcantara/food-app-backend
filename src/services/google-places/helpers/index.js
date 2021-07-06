@@ -1,17 +1,22 @@
 import { v4 as uuidv4 } from 'uuid'
 import logger from 'hoopa-logger'
 
-import { GooglePlacesClient } from '../'
+import { GooglePlacesClient } from '..'
 
 export const normalizeGooglePlacesResponse = async (
-  { name, formatted_address, types, price_level, rating, photos },
+  { name, formatted_address, price_level, rating, photos },
   cuisine
 ) => {
   try {
     let featured_image = 'img_fallback'
 
-    if (photos && photos.length && photos[0].photo_reference) {
-      featured_image = photos[0].photo_reference
+    if (photos && photos.length > 0 && photos[0].photo_reference) {
+      const { request } = await GooglePlacesClient.getRestaurantPhoto(
+        photos[0].photo_reference
+      )
+
+      featured_image =
+        request._redirectable._options.href || photos[0].photo_reference
     }
 
     return {
@@ -23,7 +28,7 @@ export const normalizeGooglePlacesResponse = async (
       currency: 'R$',
       average_cost: (price_level || '').toString(),
       user_rating: rating.toString(),
-      featured_image
+      featured_image,
     }
   } catch (error) {
     logger.error(error)
