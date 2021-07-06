@@ -1,16 +1,8 @@
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
 import { v4 as uuidv4 } from 'uuid'
-import isAfter from 'date-fns/isAfter'
-//
-import { cacheAllRestaurants } from './jobs/cache-restaurants'
 // Rethinkly link instance
 import { rethinkly } from '../../services'
-// GooglePlaces Instance
-import { GooglePlacesClient } from '../../services/google-places'
-// Consts
-const cache_expiration = Date.now() + 2592000
-const now = Date.now()
 
 /**
  * Get a restaurant
@@ -70,52 +62,11 @@ export const getByLocation = async (_, { location }) => {
 // export const getAll = async (_, { city, category }) => {
 export const getAll = async () => {
   logger.info('Getting all restaurants...')
-  const data = await cacheAllRestaurants()
+  const conn = await rethinkly()
 
-  // const conn = await rethinkly()
-  // const dbRestaurants = await data.get(conn, 'restaurants')
-  // const failed = []
+  const results = await data.get(conn, 'restaurants')
 
-  // if (
-  //   dbRestaurants.length === 0 ||
-  //   isAfter(now, dbRestaurants[0].cache_expiration)
-  // ) {
-  //   logger.info('Caching restaurants...')
-
-  //   Promise.all(
-  //     cuisines.map(async category => {
-  //       const apiResults = await GooglePlacesClient.getRestaurants(category)
-
-  //       apiResults.map(async establishment => {
-  //         const establishmentData = await establishment
-
-  //         const record = {
-  //           ...establishmentData,
-  //           cache_expiration
-  //         }
-
-  //         try {
-  //           await data.insert(conn, 'restaurants', record)
-  //         } catch (error) {
-  //           console.log({ error })
-  //           logger.info(`Error inserting restaurant ${record.id}`)
-  //           failed.concat(record.id)
-  //         }
-  //       })
-
-  //       logger.info(
-  //         `Cached ${apiResults.length} restaurants with ${failed.length} failures`
-  //       )
-  //     })
-  //   ).then(async () => {
-  //     const dbRestaurants = await data.get(conn, 'restaurants')
-
-  //     return dbRestaurants
-  //   })
-  // }
-
-  // logger.info('Using cached data')
-  // return dbRestaurants
+  return results
 }
 
 /**
@@ -134,7 +85,7 @@ export const insertRestaurant = async (_, { data: values }) => {
 
   const { inserted } = await data.insert(conn, 'restaurants', {
     id,
-    ...values
+    ...values,
   })
 
   if (inserted < 1) {
@@ -142,7 +93,7 @@ export const insertRestaurant = async (_, { data: values }) => {
 
     return {
       success: false,
-      generated_id: null
+      generated_id: null,
     }
   }
 
@@ -168,7 +119,7 @@ export const deleteRestaurant = async (_, { id }) => {
 
     return {
       success: false,
-      removed_id: null
+      removed_id: null,
     }
   }
 
@@ -205,14 +156,14 @@ export const updateRestaurant = async (_, { id, data: values }) => {
 
       return {
         success: false,
-        updated: false
+        updated: false,
       }
     }
 
     return replaced > 0
       ? {
           success: true,
-          updated_id: id
+          updated_id: id,
         }
       : logger.error(`Error updating record with --id: ${id}`)
   }
