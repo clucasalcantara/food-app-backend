@@ -1,14 +1,8 @@
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
 import { v4 as uuidv4 } from 'uuid'
-import isAfter from 'date-fns/isAfter'
 // Rethinkly link instance
 import { rethinkly } from '../../services'
-// GooglePlaces Instance
-import { GooglePlacesClient } from '../../services/google-places'
-// Consts
-const cache_expiration = Date.now() + 2592000
-const now = Date.now()
 
 /**
  * Get a restaurant
@@ -68,43 +62,11 @@ export const getByLocation = async (_, { location }) => {
 // export const getAll = async (_, { city, category }) => {
 export const getAll = async () => {
   logger.info('Getting all restaurants...')
-
   const conn = await rethinkly()
-  const dbRestaurants = await data.get(conn, 'restaurants')
-  const failed = []
 
-  if (
-    dbRestaurants.length === 0 ||
-    isAfter(now, dbRestaurants[0].cache_expiration)
-  ) {
-    logger.info('Caching restaurants...')
-    const apiResults = await GooglePlacesClient.getRestaurants()
+  const results = await data.get(conn, 'restaurants')
 
-    apiResults.map(async establishment => {
-      const record = {
-        ...establishment,
-        cache_expiration,
-      }
-
-      try {
-        await data.insert(conn, 'restaurants', record)
-      } catch (error) {
-        console.log({ error })
-        logger.info(`Error inserting restaurant ${record.id}`)
-        failed.concat(record.id)
-      }
-    })
-
-    logger.info(
-      `Cached ${apiResults.length} restaurants with ${failed.length} failures`
-    )
-
-    return apiResults
-  }
-
-  logger.info('Using cached information...')
-
-  return dbRestaurants
+  return results
 }
 
 /**

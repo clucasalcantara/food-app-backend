@@ -9,7 +9,9 @@
     "dev": "nodemon index.js",
     "lint": "xo --quiet",
     "lint:format": "xo --quiet --write 'src/**/*.js'",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "jobs:restaurants": "node jobs",
+    "seed:run": "yarn jobs:restaurants && yarn dev"
   },
   "keywords": [
     "api",
@@ -29,6 +31,7 @@
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
     "hoopa-logger": "^1.1.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-protect": "^1.0.1",
     "koa2-cors": "^2.0.6",

@@ -16,5 +16,6 @@ module.exports = {
     camelcase: {
       properties: 'never',
     },
+    'no-process-exit': 'never',
   },
 }
