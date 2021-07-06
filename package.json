@@ -9,7 +9,9 @@
     "dev": "nodemon index.js",
     "lint": "xo --quiet",
     "lint:format": "xo --quiet --write 'src/**/*.js'",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "jobs:restaurants": "node jobs",
+    "seed:run": "yarn jobs:restaurants && yarn dev"
   },
   "keywords": [
     "api",
