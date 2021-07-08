@@ -8,6 +8,12 @@ import { ApolloServer } from 'apollo-server-koa'
 import logger from 'hoopa-logger'
 // GraphQL Definitions
 import { appSchema as schema } from './graphql'
+// Auth Helpers
+import { usePassport } from './common/helpers/passport'
+import { useRestRoutes } from './rest-auth'
+
+const passport = usePassport()
+const port = process.env.PORT || 4005
 
 const Server = new ApolloServer({
   schema,
@@ -19,19 +25,13 @@ const Server = new ApolloServer({
 })
 
 const EatList = new Koa()
-const router = new Router()
-
-router.get('/auth/facebook', (ctx, next) => {
-  // @TODO: Authenticate using passport
-  ctx.status = 200
-  ctx.body = 'In development'
-  next()
-})
-
-const port = process.env.PORT || 4005
+const router = useRestRoutes(new Router(), passport)
 const { graphqlPath } = Server
 
+// Apply middlewares
 EatList.use(cors())
+
+EatList.use(passport.initialize())
 EatList.use(router.routes()).use(router.allowedMethods())
 
 Server.applyMiddleware({ app: EatList })
