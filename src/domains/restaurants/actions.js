@@ -1,6 +1,8 @@
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
 import { v4 as uuidv4 } from 'uuid'
+// Helpers
+import { verifyAuth } from '../../common/helpers/auth-middleware'
 // Rethinkly link instance
 import { rethinkly } from '../../services'
 
@@ -60,7 +62,9 @@ export const getByLocation = async (_, { location }) => {
  * @return {Promise} retrieveData response
  */
 // export const getAll = async (_, { city, category }) => {
-export const getAll = async () => {
+export const getAll = async (_, args, context) => {
+  verifyAuth(context)
+
   logger.info('Getting all restaurants...')
   const conn = await rethinkly()
 
@@ -77,7 +81,8 @@ export const getAll = async () => {
  * @param {Object} configParams
  * @return {Object} response
  */
-export const insertRestaurant = async (_, { data: values }) => {
+export const insertRestaurant = async (_, { data: values }, context) => {
+  verifyAuth(context)
   logger.info(`Inserting restaurant ${JSON.stringify(values)}...`)
 
   const conn = await rethinkly()
@@ -108,7 +113,8 @@ export const insertRestaurant = async (_, { data: values }) => {
  * @param {String} id
  * @return {Object} response
  */
-export const deleteRestaurant = async (_, { id }) => {
+export const deleteRestaurant = async (_, { id }, context) => {
+  verifyAuth(context)
   logger.info(`Deleting restaurant ${JSON.stringify(id)}...`)
 
   const conn = await rethinkly()
@@ -135,7 +141,8 @@ export const deleteRestaurant = async (_, { id }) => {
  * @param {Object} values
  * @return {Object} response
  */
-export const updateRestaurant = async (_, { id, data: values }) => {
+export const updateRestaurant = async (_, { id, data: values }, context) => {
+  verifyAuth(context)
   logger.info(`Updating restaurant ${JSON.stringify(id)}...`)
 
   const conn = await rethinkly()
