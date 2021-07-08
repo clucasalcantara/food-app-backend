@@ -1,5 +1,6 @@
 import {
   addUser,
+  authenticate,
   updateUser,
   deleteUser,
   getAllUsers,
@@ -8,5 +9,5 @@ import {
 
 export default {
   queries: { getAllUsers, getUserById },
-  mutations: { addUser, updateUser, deleteUser },
+  mutations: { addUser, updateUser, deleteUser, authenticate },
 }

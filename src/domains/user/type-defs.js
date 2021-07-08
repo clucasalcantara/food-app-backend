@@ -6,11 +6,16 @@ export const types = `
     email: String
   }
 
+  type authResponse {
+    token: String
+  }
+  
   input UserInput {
     name: String
     phone: String
     email: String
   }
+
 `
 
 export const queries = `
@@ -22,4 +27,5 @@ export const mutations = `
   addUser(data: UserInput): insertResponse
   deleteUser(id: String): removeResponse
   updateUser(id: String, data: UserInput): updateResponse
+  authenticate(username: String, passwordHash: String, provider: String): authResponse
 `
