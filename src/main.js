@@ -10,7 +10,7 @@ import logger from 'hoopa-logger'
 import { appSchema as schema } from './graphql'
 // Auth Helpers
 import { usePassport } from './common/helpers/passport'
-import { useRestRoutes } from './rest-auth'
+import { useRestRoutes } from './domains/auth'
 
 const passport = usePassport()
 const port = process.env.PORT || 4005
