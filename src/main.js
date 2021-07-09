@@ -26,7 +26,6 @@ const Server = new ApolloServer({
 
 const EatList = new Koa()
 const router = useRestRoutes(new Router(), passport)
-const { graphqlPath } = Server
 
 // Apply middlewares
 EatList.use(cors())
@@ -34,10 +33,8 @@ EatList.use(cors())
 EatList.use(passport.initialize())
 EatList.use(router.routes()).use(router.allowedMethods())
 
-Server.applyMiddleware({ app: EatList })
+Server.applyMiddleware({ app: EatList, path: '/playground' })
 
 EatList.listen({ port }, () =>
-  logger.info(
-    `🚀 Food App API running at http://localhost:${port}${graphqlPath}`
-  )
+  logger.info(`🚀 Food App API running at http://localhost:${port}`)
 )
