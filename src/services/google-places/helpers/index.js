@@ -4,7 +4,15 @@ import logger from 'hoopa-logger'
 import { GooglePlacesClient } from '..'
 
 export const normalizeGooglePlacesResponse = async (
-  { name, formatted_address, price_level, rating, photos },
+  {
+    name,
+    formatted_address,
+    price_level,
+    rating,
+    photos,
+    geometry,
+    opening_hours,
+  },
   cuisine
 ) => {
   try {
@@ -29,6 +37,8 @@ export const normalizeGooglePlacesResponse = async (
       average_cost: (price_level || '').toString(),
       user_rating: rating.toString(),
       featured_image,
+      geometry: geometry || '',
+      opening_hours: opening_hours || '',
     }
   } catch (error) {
     logger.error(error)
