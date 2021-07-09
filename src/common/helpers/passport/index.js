@@ -13,10 +13,10 @@ export const usePassport = () => {
         clientSecret: process.env.FB_APP_SECRET,
         callbackURL:
           'https://api.foodapp.caioalcantara.dev/auth/facebook/callback',
-        profileFields: ['email', 'name'],
+        profileFields: ['email', 'name', 'picture'],
       },
       (accessToken, refreshToken, profile, done) => {
-        return done(null, { profile, accessToken, refreshToken })
+        return done(null, { profile: profile._json, accessToken, refreshToken })
       }
     )
   )
