@@ -4,7 +4,7 @@ import logger from 'hoopa-logger'
 import { normalizeGooglePlacesResponse } from './helpers'
 
 const placesClient = axios.create({
-  baseURL: 'https://maps.googleapis.com/maps/api/place'
+  baseURL: 'https://maps.googleapis.com/maps/api/place',
 })
 
 export const GooglePlacesClient = {
@@ -12,12 +12,12 @@ export const GooglePlacesClient = {
     try {
       const {
         // @TODO: Update to get next page data: { results, next_page_token }
-        data: { results }
+        data: { results },
       } = await placesClient.get('/textsearch/json', {
         params: {
           query: `${cuisine}+restaurants+in+${location}`,
-          key: process.env.GOOGLE_PLACES_API_KEY
-        }
+          key: process.env.GOOGLE_PLACES_API_KEY,
+        },
       })
 
       const data = results.map(result =>
@@ -34,10 +34,22 @@ export const GooglePlacesClient = {
       params: {
         key: process.env.GOOGLE_PLACES_API_KEY,
         photoreference,
-        maxwidth: 1024
-      }
+        maxwidth: 1024,
+      },
     })
 
     return result
-  }
+  },
+  getRestaurantDetails: async place_id => {
+    const {
+      data: { result },
+    } = await placesClient.get('/details/json', {
+      params: {
+        place_id,
+        key: process.env.GOOGLE_PLACES_API_KEY,
+      },
+    })
+
+    return result
+  },
 }
