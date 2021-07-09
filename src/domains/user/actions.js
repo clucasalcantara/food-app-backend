@@ -1,5 +1,7 @@
+import { AuthenticationError } from 'apollo-server-koa'
 import logger from 'hoopa-logger'
 import { data } from 'rethinkly'
+import { sign } from 'jsonwebtoken'
 
 import { rethinkly } from '../../services'
 
@@ -127,4 +129,29 @@ export const getUserById = async (_, { id }) => {
   logger.info('Here is the user:', JSON.stringify(result))
 
   return result
+}
+
+/**
+ * Authenticate
+ * This function is a resolver mutation used by the graphql backend
+ * to authenticate an user
+ * @param {*} _ GQL Response status and default body
+ * @param {Object} configParams
+ * @return {Promise} retrieveData response
+ */
+export const authenticate = async (_, { username, passwordHash }) => {
+  logger.info(`Authenticating user ${username} using standard method...`)
+
+  const conn = await rethinkly()
+  const [user] = await data.get(conn, 'users', { password: passwordHash })
+
+  if (!user) {
+    throw new AuthenticationError(`Incorrect User/Password`)
+  }
+
+  const token = sign({ user }, process.env.API_SECRET)
+
+  return {
+    token,
+  }
 }

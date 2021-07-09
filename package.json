@@ -33,9 +33,12 @@
     "hoopa-logger": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
+    "koa-passport": "^4.1.4",
     "koa-protect": "^1.0.1",
+    "koa-router": "^10.0.0",
     "koa2-cors": "^2.0.6",
     "nodemon": "^1.19.1",
+    "passport-facebook": "^3.0.0",
     "rethinkly": "^1.4.0",
     "uuid": "^8.3.2"
   },
