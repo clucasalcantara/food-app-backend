@@ -29,6 +29,11 @@ export const useRestRoutes = (router, passport) => {
 
       if (!databaseUser) {
         const id = uuidv4()
+        const {
+          picture: {
+            data: { url },
+          },
+        } = profile
 
         const userData = {
           id,
@@ -37,7 +42,7 @@ export const useRestRoutes = (router, passport) => {
           first_name: profile.first_name,
           last_name: profile.last_name,
           provider_id: profile.id,
-          profile_pic: profile.picture,
+          profile_pic: url || '',
           provider_token: accessToken,
         }
 
