@@ -1,13 +1,12 @@
 import {
   getById,
-  getByLocation,
-  getAll,
+  getAllRestaurants,
   insertRestaurant,
   deleteRestaurant,
   updateRestaurant,
 } from './actions'
 
 export default {
-  queries: { getById, getByLocation, getAll },
+  queries: { getById, getAllRestaurants },
   mutations: { insertRestaurant, deleteRestaurant, updateRestaurant },
 }

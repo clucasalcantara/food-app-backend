@@ -2,47 +2,25 @@ export const types = `
   type Restaurant {
     id: String
     name: String
-    location: Location
-    cuisines: String
+    location: String
+    cuisine: String
     price_range: String
+    user_rating: String
     currency: String
-    average_cost: Int
-    cache_expiration: Int
-    highlights: [String]
-    timings: String
-    thumb: String
     featured_image: String
-    phone: String
-    category: String
+    geometry: Geometry
+    opening_hours: [String]
+    website: String
+    formatted_phone_number: String
+  }
+
+  type Geometry {
+    location: Location
   }
 
   type Location {
-    address: String
-    city: String
-    city_id: Int
-    country_id: Int
-    latitude: Float
-    locality: String
-    locality_verbose: String
-    longitude: Float
-    zipcode: String
-  }
-
-  input LocationType {
-    address: String
-    city: String
-    city_id: Int
-    country_id: Int
-    latitude: Float
-    locality: String
-    locality_verbose: String
-    longitude: Float
-    zipcode: String
-  }
-
-  type category {
-    id: Int
-    name: String
+    lat: Float
+    lgn: Float
   }
 
   input RestaurantInput {
@@ -53,8 +31,8 @@ export const types = `
 
 export const queries = `
   getById(id: String): Restaurant
-  getByLocation(location: LocationType): [Restaurant]
-  getAll(city: Int, category: Int): [Restaurant]
+  getAllRestaurants(page: Int, pageSize: Int): [Restaurant]
+  getByCuisine(cuisine: String): [Restaurant]
 `
 
 export const mutations = `

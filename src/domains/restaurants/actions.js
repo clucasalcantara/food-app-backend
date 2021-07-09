@@ -62,7 +62,7 @@ export const getByLocation = async (_, { location }) => {
  * @return {Promise} retrieveData response
  */
 // export const getAll = async (_, { city, category }) => {
-export const getAll = async (_, args, context) => {
+export const getAllRestaurants = async (_, args, context) => {
   verifyAuth(context)
 
   logger.info('Getting all restaurants...')
