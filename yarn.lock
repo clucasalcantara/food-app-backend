@@ -6171,10 +6171,10 @@ rethinkdb@^2.3.3:
   dependencies:
     bluebird ">= 2.3.2 < 3"
 
-rethinkly@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/rethinkly/-/rethinkly-1.4.0.tgz#619a4eaf028ac4ea2b98cb2ff6b1729234c4e233"
-  integrity sha512-RgGti51qzAu+MFkut5iI7jCjeZuBaczhYDL1yH4RlHFQzrx445c7IzacV5SihavuQwBdiilc9WEWPL0raizxlg==
+rethinkly@1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/rethinkly/-/rethinkly-1.4.1.tgz#1d98c4569fc22a6b9715355afc6e5fa2b80fac24"
+  integrity sha512-XV5sdmTT/6AhHOg1FK/2MDrSb5QKFGcmjRaXsSbIQfizy0/lAMgwhve5qYVqKmyi08Qzem93r9Cu/oz9yHAdjQ==
   dependencies:
     "@babel/plugin-transform-runtime" "^7.5.5"
     "@babel/polyfill" "^7.4.4"
