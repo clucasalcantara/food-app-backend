@@ -1,4 +1,4 @@
-# Athena Contributing Guide line
+# Contributing Guide line
 
 ## Git Rules
 

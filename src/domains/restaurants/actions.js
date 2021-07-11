@@ -70,13 +70,13 @@ export const getAllRestaurants = async (_, args, context) => {
  * @param {Object} searchParams
  * @return {Promise} retrieveData response
  */
-export const searchRestaurants = async (_, predicate) => {
+export const searchRestaurants = async (_, { filter }) => {
   logger.info(
-    `Searching for restaurants predicate => ${JSON.stringify(predicate)}...`
+    `Searching for restaurants predicate => ${JSON.stringify(filter)}...`
   )
 
   const conn = await rethinkly()
-  const results = await data.get(conn, 'restaurants', predicate)
+  const results = await data.get(conn, 'restaurants', filter)
 
   return results
 }

@@ -25,12 +25,15 @@ export const types = `
 
   input RestaurantInput {
     name: String
-    city: String
-  }
-
-  type SearchKey {
-    filterName: String
-    value: string
+    location: String
+    cuisine: String
+    price_range: String
+    user_rating: String
+    currency: String
+    featured_image: String
+    opening_hours: [String]
+    website: String
+    formatted_phone_number: String
   }
 `
 
@@ -38,7 +41,7 @@ export const queries = `
   getById(id: String): Restaurant
   getAllRestaurants(page: Int, pageSize: Int): [Restaurant]
   getByCuisine(cuisine: String): [Restaurant]
-  searchRestaurants(filters: [SearchKey]): [Restaurant]
+  searchRestaurants(filter: RestaurantInput): [Restaurant]
 `
 
 export const mutations = `

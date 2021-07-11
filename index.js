@@ -1,5 +1,5 @@
 /**
- * Athena entry file
+ * Entry file
  * API to handle data operations on Brian schema
  */
 /* eslint-disable no-global-assign, import/no-unassigned-import */
