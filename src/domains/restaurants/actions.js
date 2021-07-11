@@ -28,17 +28,6 @@ export const getById = async (_, { id }) => {
  * Get a restaurant by city
  * This function is a resolver used by the graphql backend
  * Responsible to retrieve a GQL payload response based on
- * a query by location
- * Avaliable props
- *  address: String
- * city: String
- * city_id: Int
- * country_id: Int
- * latitude: Float
- * locality: String
- * locality_verbose: String
- * longitude: Float
- * zipcode: String
  * @param {*} _ GQL Response status and default body
  * @param {Object} configParams
  * @return {Promise} retrieveData response
@@ -69,6 +58,25 @@ export const getAllRestaurants = async (_, args, context) => {
   const conn = await rethinkly()
 
   const results = await data.get(conn, 'restaurants')
+
+  return results
+}
+
+/**
+ * Search a restaurant
+ * This function is a resolver used by the graphql backend
+ * Responsible to retrieve a GQL payload response based on filters
+ * @param {*} _ GQL Response status and default body
+ * @param {Object} searchParams
+ * @return {Promise} retrieveData response
+ */
+export const searchRestaurants = async (_, predicate) => {
+  logger.info(
+    `Searching for restaurants predicate => ${JSON.stringify(predicate)}...`
+  )
+
+  const conn = await rethinkly()
+  const results = await data.get(conn, 'restaurants', predicate)
 
   return results
 }

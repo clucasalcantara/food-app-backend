@@ -4,9 +4,10 @@ import {
   insertRestaurant,
   deleteRestaurant,
   updateRestaurant,
+  searchRestaurants,
 } from './actions'
 
 export default {
-  queries: { getById, getAllRestaurants },
+  queries: { getById, getAllRestaurants, searchRestaurants },
   mutations: { insertRestaurant, deleteRestaurant, updateRestaurant },
 }

@@ -27,12 +27,18 @@ export const types = `
     name: String
     city: String
   }
+
+  type SearchKey {
+    filterName: String
+    value: string
+  }
 `
 
 export const queries = `
   getById(id: String): Restaurant
   getAllRestaurants(page: Int, pageSize: Int): [Restaurant]
   getByCuisine(cuisine: String): [Restaurant]
+  searchRestaurants(filters: [SearchKey]): [Restaurant]
 `
 
 export const mutations = `
