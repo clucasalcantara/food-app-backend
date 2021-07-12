@@ -70,7 +70,9 @@ export const getAllRestaurants = async (_, args, context) => {
  * @param {Object} searchParams
  * @return {Promise} retrieveData response
  */
-export const searchRestaurants = async (_, { filter }) => {
+export const searchRestaurants = async (_, { filter }, context) => {
+  verifyAuth(context)
+
   logger.info(
     `Searching for restaurants predicate => ${JSON.stringify(filter)}...`
   )
