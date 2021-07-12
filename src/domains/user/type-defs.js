@@ -4,6 +4,9 @@ export const types = `
     name: String
     phone: String
     email: String
+    favorites: [String]
+    wishlist: [String]
+    visited: [String]
   }
 
   type authResponse {
