@@ -25,7 +25,7 @@ export const queries = `
 `
 
 export const mutations = `
-  inserOrder(data: OrderInput): insertResponse
+  insertOrder(data: OrderInput): insertResponse
   deleteOrder(orderId: String): removeResponse
   updateOrder(id: String, data: OrderInput): updateResponse
 `
