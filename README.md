@@ -19,6 +19,9 @@ Create a .env file following the env example
 
 run `yarn` to install dependencies
 
+run `docker run -d -P --name rethink1 rethinkdb` to run database
+
+
 ## How to run
 
 Just run `yarn dev` to boots up the development mode
